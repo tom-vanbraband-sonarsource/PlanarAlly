@@ -55,3 +55,6 @@ If you want to contribute some gold pieces, feel free to checkout my [Patreon](h
 
 ![Example view of a player with a light source](https://github.com/Kruptein/PlanarAlly/blob/dev/extra/player_light_example.png?raw=true)
 _Credits to Gogots for the background map used [source](https://gogots.deviantart.com/art/City-of-Moarkaliff-702295905)_
+
+
+
