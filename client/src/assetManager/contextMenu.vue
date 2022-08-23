@@ -77,7 +77,7 @@ export default class AssetContextMenu extends Vue {
 
 <template>
     <ContextMenu :visible="visible" :left="left + 'px'" :top="top + 'px'" @close="close">
-        <li @click="rename" v-t="'common.rename'"></li>
-        <li @click="remove" v-t="'common.remove'"></li>
+       <ul><li @click="rename" v-t="'common.rename'"></li></ul>
+       <ul><li @click="remove" v-t="'common.remove'"></li></ul>
     </ContextMenu>
 </template>
