@@ -38,6 +38,9 @@ export default class AssetContextMenu extends Vue {
     close(): void {
         this.visible = false;
     }
+
+
+
     async rename(): Promise<void> {
         if (assetStore.selected.length !== 1) return;
         const asset = assetStore.idMap.get(assetStore.selected[0])!;
