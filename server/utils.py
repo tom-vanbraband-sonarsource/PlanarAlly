@@ -5,8 +5,11 @@ from pathlib import Path
 
 
 def all_subclasses(cls):
-    return set(cls.__subclasses__()).union(
-        [s for c in cls.__subclasses__() for s in all_subclasses(c)]
+    subclasses = cls.__subclasses__()
+    if not subclasses:
+        return set()
+    return set(subclasses).union(
+        [s for c in subclasses for s in all_subclasses(c)]
     )
 
 

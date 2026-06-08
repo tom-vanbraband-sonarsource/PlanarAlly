@@ -20,12 +20,12 @@ try:
             .strip()
             .decode("utf-8")
         )
-    except:
+    except Exception:
         pass
 
     if "PA_GIT_INFO" in os.environ:
         env_version = os.environ["PA_GIT_INFO"]
-except:
+except Exception:
     release_version = None
     env_version = None
 

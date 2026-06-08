@@ -62,7 +62,7 @@ class Shape(BaseModel):
     def get_path(self):
         try:
             return f"{self.name}@{self.layer.get_path()}"
-        except:
+        except Exception:
             return self.name
 
     def get_options(self) -> Dict[str, Any]:
