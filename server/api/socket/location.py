@@ -406,7 +406,7 @@ async def get_location_spawn_info(sid: str, location_id: int):
                     pass
                 else:
                     data.append(shape.as_dict(pr.player, True))
-    except:
+    except Exception:
         logger.exception("Could not load spawn locations")
 
     await sio.emit("Location.Spawn.Info", data=data, room=sid, namespace=GAME_NS)
