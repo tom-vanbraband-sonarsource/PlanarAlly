@@ -37,6 +37,8 @@ from utils import logger
 
 from . import access, options
 
+SHAPES_REMOVE = "Shapes.Remove"
+
 
 @sio.on("Shape.Add", namespace=GAME_NS)
 @auth.login_required(app, sio)
@@ -177,7 +179,7 @@ async def remove_shapes(sid: str, data: TemporaryShapesList):
             ).execute()
 
     await sio.emit(
-        "Shapes.Remove",
+        SHAPES_REMOVE,
         data["uuids"],
         room=pr.active_location.get_path(),
         skip_sid=sid,
@@ -242,7 +244,7 @@ async def change_shape_layer(sid: str, data: Dict[str, Any]):
                 skip_sid=sid,
             ):
                 await sio.emit(
-                    "Shapes.Remove", data["uuids"], room=psid, namespace=GAME_NS,
+                    SHAPES_REMOVE, data["uuids"], room=psid, namespace=GAME_NS,
                 )
 
     for shape in shapes:
@@ -345,7 +347,7 @@ async def move_shapes(sid: str, data: ServerShapeLocationMove):
     shapes = [Shape.get_by_id(sh) for sh in data["shapes"]]
 
     await sio.emit(
-        "Shapes.Remove",
+        SHAPES_REMOVE,
         [sh.uuid for sh in shapes],
         room=pr.active_location.get_path(),
         namespace=GAME_NS,
