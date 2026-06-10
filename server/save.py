@@ -23,6 +23,9 @@ from utils import OldVersionException, UnknownVersionException
 
 SAVE_VERSION = 42
 
+_TEMP_SHAPE_SQL = "CREATE TEMPORARY TABLE _shape AS SELECT * FROM shape"
+_DROP_SHAPE_SQL = "DROP TABLE shape"
+
 logger: logging.Logger = logging.getLogger("PlanarAllyServer")
 logger.setLevel(logging.INFO)
 
@@ -454,8 +457,8 @@ def upgrade(version):
                 "INSERT INTO room (id, name, creator_id, invitation_code, is_locked, default_options_id) SELECT id, name, creator_id, invitation_code, is_locked, default_options_id FROM _room"
             )
 
-            db.execute_sql("CREATE TEMPORARY TABLE _shape AS SELECT * FROM shape")
-            db.execute_sql("DROP TABLE shape")
+            db.execute_sql(_TEMP_SHAPE_SQL)
+            db.execute_sql(_DROP_SHAPE_SQL)
             db.execute_sql(
                 'CREATE TABLE "shape" ("uuid" TEXT NOT NULL PRIMARY KEY, "layer_id" INTEGER NOT NULL, "type_" TEXT NOT NULL, "x" REAL NOT NULL, "y" REAL NOT NULL, "name" TEXT, "name_visible" INTEGER NOT NULL, "fill_colour" TEXT NOT NULL, "stroke_colour" TEXT NOT NULL, "vision_obstruction" INTEGER NOT NULL, "movement_obstruction" INTEGER NOT NULL, "is_token" INTEGER NOT NULL, "annotation" TEXT NOT NULL, "draw_operator" TEXT NOT NULL, "index" INTEGER NOT NULL, "options" TEXT, "badge" INTEGER NOT NULL, "show_badge" INTEGER NOT NULL, "default_edit_access" INTEGER NOT NULL, "default_vision_access" INTEGER NOT NULL, FOREIGN KEY ("layer_id") REFERENCES "layer" ("id") ON DELETE CASCADE)'
             )
@@ -606,8 +609,8 @@ def upgrade(version):
         # Change shape.angle from integer field to float field
         db.foreign_keys = False
         with db.atomic():
-            db.execute_sql("CREATE TEMPORARY TABLE _shape AS SELECT * FROM shape")
-            db.execute_sql("DROP TABLE shape")
+            db.execute_sql(_TEMP_SHAPE_SQL)
+            db.execute_sql(_DROP_SHAPE_SQL)
             db.execute_sql(
                 'CREATE TABLE IF NOT EXISTS "shape" ("uuid" TEXT NOT NULL PRIMARY KEY, "layer_id" INTEGER NOT NULL, "type_" TEXT NOT NULL, "x" REAL NOT NULL, "y" REAL NOT NULL, "name" TEXT, "name_visible" INTEGER NOT NULL, "fill_colour" TEXT NOT NULL, "stroke_colour" TEXT NOT NULL, "vision_obstruction" INTEGER NOT NULL, "movement_obstruction" INTEGER NOT NULL, "is_token" INTEGER NOT NULL, "annotation" TEXT NOT NULL, "draw_operator" TEXT NOT NULL, "index" INTEGER NOT NULL, "options" TEXT, "badge" INTEGER NOT NULL, "show_badge" INTEGER NOT NULL, "default_edit_access" INTEGER NOT NULL, "default_vision_access" INTEGER NOT NULL, is_invisible INTEGER NOT NULL DEFAULT 0, default_movement_access INTEGER NOT NULL DEFAULT 0, is_locked INTEGER NOT NULL DEFAULT 0, angle REAL NOT NULL DEFAULT 0, stroke_width INTEGER NOT NULL DEFAULT 2, FOREIGN KEY ("layer_id") REFERENCES "layer" ("id") ON DELETE CASCADE)'
             )
@@ -684,8 +687,8 @@ def upgrade(version):
         with db.atomic():
             db.execute_sql("ALTER TABLE asset ADD COLUMN options TEXT")
 
-            db.execute_sql("CREATE TEMPORARY TABLE _shape AS SELECT * FROM shape")
-            db.execute_sql("DROP TABLE shape")
+            db.execute_sql(_TEMP_SHAPE_SQL)
+            db.execute_sql(_DROP_SHAPE_SQL)
             db.execute_sql(
                 'CREATE TABLE IF NOT EXISTS "shape" ("uuid" TEXT NOT NULL PRIMARY KEY, "layer_id" INTEGER NOT NULL, "type_" TEXT NOT NULL, "x" REAL NOT NULL, "y" REAL NOT NULL, "name" TEXT, "name_visible" INTEGER NOT NULL, "fill_colour" TEXT NOT NULL, "stroke_colour" TEXT NOT NULL, "vision_obstruction" INTEGER NOT NULL, "movement_obstruction" INTEGER NOT NULL, "is_token" INTEGER NOT NULL, "annotation" TEXT NOT NULL, "draw_operator" TEXT NOT NULL, "index" INTEGER NOT NULL, "options" TEXT, "badge" INTEGER NOT NULL, "show_badge" INTEGER NOT NULL, "default_edit_access" INTEGER NOT NULL, "default_vision_access" INTEGER NOT NULL, is_invisible INTEGER NOT NULL DEFAULT 0, default_movement_access INTEGER NOT NULL DEFAULT 0, is_locked INTEGER NOT NULL DEFAULT 0, angle REAL NOT NULL DEFAULT 0, stroke_width INTEGER NOT NULL DEFAULT 2, asset_id INTEGER, FOREIGN KEY ("layer_id") REFERENCES "layer" ("id") ON DELETE CASCADE, FOREIGN KEY ("asset_id") REFERENCES "asset" ("id"))'
             )
