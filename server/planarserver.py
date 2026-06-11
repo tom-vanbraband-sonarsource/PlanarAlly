@@ -35,7 +35,7 @@ from state.asset import asset_state
 from state.game import game_state
 
 # Force loading of socketio routes
-from api.socket import *
+import api.socket  # noqa: F401
 from api.socket.constants import GAME_NS
 from app import app, sio
 from config import config
@@ -90,7 +90,8 @@ def start_http(host, port):
 def start_https(host, port, chain, key):
     import ssl
 
-    ctx = ssl.SSLContext()
+    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ctx.minimum_version = ssl.TLSVersion.TLSv1_2
     try:
         ctx.load_cert_chain(chain, key)
     except FileNotFoundError:
